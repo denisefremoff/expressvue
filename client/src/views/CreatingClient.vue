@@ -18,7 +18,8 @@ export default {
     async submitForm() {
       try {
         const response = await axios.post('http://localhost:3000/clients', this.form);
-        this.message = 'Отправлено';
+        const newClientId = response.data.id; // Получаем ID нового клиента
+        this.$router.push({ name: 'ClientDetails', params: { id: newClientId } }); // Перенаправление на страницу клиента
       } catch (error) {
         this.message = 'Error: ' + error.response.data;
       }
@@ -46,7 +47,7 @@ export default {
       <div>
         <input type="password" placeholder="Пароль" v-model="form.password" required>
       </div>
-      <button type="submit">Отправить</button>
+      <button type="submit">Добавить</button>
     </form>
     <p v-if="message">{{ message }}</p>
   </div>

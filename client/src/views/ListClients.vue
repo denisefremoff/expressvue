@@ -31,6 +31,10 @@ export default {
           <p><strong>Срок договора в месяцах:</strong> {{ client.contract_term }}</p>
           <p><strong>Пароль:</strong> {{ client.password }}</p>
         </router-link>
+        <div class="tool">
+          <router-link :to="{ name: 'EditingClient', params: { id: client.id } }"
+            class="edit-link">Редактировать</router-link>
+        </div>
       </li>
     </ul>
     <p v-if="message">{{ message }}</p>
@@ -75,5 +79,23 @@ a {
 
 a:hover {
   opacity: 0.5;
+}
+
+.edit-link {
+  display: block;
+  width: 250px;
+  padding: 10px;
+  font-size: 16px;
+  background-color: #42b983;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.edit-link:hover {
+  background-color: #35916b;
+  opacity: 1;
 }
 </style>
