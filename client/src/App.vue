@@ -1,7 +1,6 @@
 <template>
   <nav>
-    <router-link to="/">Главная</router-link>
-    <router-link to="/creatingclient">Добавить клиента</router-link>
+    <router-link to="/">Добавить клиента</router-link>
     <router-link to="/editingclient">Редактирование клиента</router-link>
     <router-link to="/listclients">Клиенты</router-link>
   </nav>

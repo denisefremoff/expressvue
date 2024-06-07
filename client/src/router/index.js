@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import Home from '../views/Home.vue';
 import CreatingClient from '../views/CreatingClient.vue';
 import EditingClient from '../views/EditingClient.vue';
 import ListClients from '../views/ListClients.vue';
@@ -8,12 +7,6 @@ import ClientDetails from '../views/ClientDetails.vue'
 const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: Home,
-    meta: { title: "Главная" }
-  },
-  {
-    path: '/creatingclient',
     name: 'CreatingClient',
     component: CreatingClient,
     meta: { title: "Добавить клиента" }
