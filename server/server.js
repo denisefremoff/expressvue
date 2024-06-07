@@ -42,7 +42,7 @@ app.use((req, res, next) => {
 // Маршрут для получения всех приветствий
 app.get('/clients', async (req, res) => {
   try {
-    const { rows } = await pool.query('SELECT * FROM clients');
+    const { rows } = await pool.query('SELECT * FROM clients ORDER BY id ASC');
     console.log('Данные из базы данных:', rows);
     res.json(rows);
   } catch (err) {
