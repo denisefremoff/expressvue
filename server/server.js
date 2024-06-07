@@ -5,16 +5,6 @@ const pool = require('./db');
 const app = express();
 const PORT = 3000;
 
-// Настройка подключения к базе данных PostgreSQL
-// const pool = new Pool({
-//   user: 'postgres',
-//   host: 'localhost',
-//   database: 'expressvue',
-//   password: '2705Lenin942',
-//   port: 5432,
-//   client_encoding: 'utf8'
-// });
-
 // Middleware для парсинга JSON и URL-encoded форм
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
