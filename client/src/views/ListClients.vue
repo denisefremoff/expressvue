@@ -15,6 +15,17 @@ export default {
     } catch (error) {
       this.message = 'Error: ' + (error.response ? error.response.data : error.message);
     }
+  },
+  methods: {
+    async deleteClient(clientId) {
+      try {
+        await axios.delete(`http://localhost:3000/clients/${clientId}`);
+        this.clients = this.clients.filter(client => client.id !== clientId);
+        this.message = 'Клиент успешно удален';
+      } catch (error) {
+        this.message = 'Error: ' + (error.response ? error.response.data : error.message);
+      }
+    }
   }
 };
 </script>
@@ -34,6 +45,7 @@ export default {
         <div class="tool">
           <router-link :to="{ name: 'EditingClient', params: { id: client.id } }"
             class="edit-link">Редактировать</router-link>
+          <button @click="deleteClient(client.id)">Удалить</button>
         </div>
       </li>
     </ul>
@@ -91,11 +103,34 @@ a:hover {
   border: none;
   cursor: pointer;
   border-radius: 10px;
+  margin-right: 10px;
+}
+
+.tool {
   margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
 }
 
 .edit-link:hover {
   background-color: #35916b;
   opacity: 1;
+}
+
+button {
+  display: block;
+  padding: 10px;
+  font-size: 16px;
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  width: 270px;
+  margin-left: 10px;
+}
+
+button:hover {
+  background-color: #c0392b;
 }
 </style>

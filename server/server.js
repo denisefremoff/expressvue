@@ -105,6 +105,23 @@ app.patch('/clients/:id', async (req, res) => {
   }
 });
 
+// Маршрут для удаления клиента
+app.delete('/clients/:id', async (req, res) => {
+  const clientId = req.params.id;
+  try {
+    const result = await pool.query('DELETE FROM clients WHERE id = $1 RETURNING *', [clientId]);
+    if (result.rows.length === 0) {
+      res.status(404).send('Клиент не найден');
+    } else {
+      console.log('Клиент удален:', result.rows[0]);
+      res.json(result.rows[0]);
+    }
+  } catch (err) {
+    console.error('Ошибка при выполнении запроса к базе данных:', err);
+    res.status(500).send('Ошибка сервера');
+  }
+});
+
 // Запуск сервера
 app.listen(PORT, () => {
   console.log(`Сервер работает на http://localhost:${PORT}`);
