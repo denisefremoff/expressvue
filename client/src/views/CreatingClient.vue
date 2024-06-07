@@ -1,29 +1,33 @@
 <script>
-import axios from 'axios';
+import axios from "axios";
 
 export default {
   data() {
     return {
       form: {
-        name: '',
-        email: '',
-        contract_number: '',
-        contract_term: '',
-        password: ''
+        fullName: "",
+        email: "",
+        contract_number: "",
+        contract_term: "",
+        password: "",
       },
-      message: ''
+      message: "",
     };
   },
   methods: {
     async submitForm() {
       try {
-        const response = await axios.post('http://localhost:3000/clients', this.form);
-        this.message = 'Отправлено';
+        const response = await axios.post(
+          "http://localhost:3000/api/manager/client-registration",
+          this.form
+        );
+        this.message = "Отправлено";
+        console.log(response.data);
       } catch (error) {
-        this.message = 'Error: ' + error.response.data;
+        this.message = "Error: " + error.response.data;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -32,19 +36,44 @@ export default {
     <h2>Создать нового клиента</h2>
     <form @submit.prevent="submitForm">
       <div>
-        <input type="text" placeholder="Фамилия Имя Отчество" v-model="form.name" required>
+        <input
+          type="text"
+          placeholder="Фамилия Имя Отчество"
+          v-model="form.fullName"
+          required
+        />
       </div>
       <div>
-        <input type="email" placeholder="E-mail" v-model="form.email" required>
+        <input
+          type="email"
+          placeholder="E-mail"
+          v-model="form.email"
+          required
+        />
       </div>
       <div>
-        <input type="text" placeholder="Номер договора" v-model="form.contract_number" required>
+        <input
+          type="text"
+          placeholder="Номер договора"
+          v-model="form.contract_number"
+          required
+        />
       </div>
       <div>
-        <input type="number" placeholder="Срок договора в месяцах" v-model="form.contract_term" required>
+        <input
+          type="number"
+          placeholder="Срок договора в месяцах"
+          v-model="form.contract_term"
+          required
+        />
       </div>
       <div>
-        <input type="password" placeholder="Пароль" v-model="form.password" required>
+        <input
+          type="password"
+          placeholder="Пароль"
+          v-model="form.password"
+          required
+        />
       </div>
       <button type="submit">Отправить</button>
     </form>
