@@ -1,21 +1,25 @@
 <script>
-import axios from 'axios';
+import axios from "axios";
 
 export default {
   data() {
     return {
       clients: [],
-      message: ''
+      message: "",
     };
   },
   async created() {
     try {
-      const response = await axios.get('http://localhost:3000/clients');
+      const response = await axios.get(
+        "http://localhost:3000/api/manager/clients"
+      );
       this.clients = response.data;
+      console.log(response);
     } catch (error) {
-      this.message = 'Error: ' + (error.response ? error.response.data : error.message);
+      this.message =
+        "Error: " + (error.response ? error.response.data : error.message);
     }
-  }
+  },
 };
 </script>
 
@@ -25,10 +29,12 @@ export default {
     <ul>
       <li v-for="client in clients" :key="client.id">
         <router-link :to="{ name: 'ClientDetails', params: { id: client.id } }">
-          <p><strong>ФИО:</strong> {{ client.name }}</p>
+          <p><strong>ФИО:</strong> {{ client.fullName }}</p>
           <p><strong>E-mail:</strong> {{ client.email }}</p>
           <p><strong>№ договора:</strong> {{ client.contract_number }}</p>
-          <p><strong>Срок договора в месяцах:</strong> {{ client.contract_term }}</p>
+          <p>
+            <strong>Срок договора в месяцах:</strong> {{ client.contract_term }}
+          </p>
           <p><strong>Пароль:</strong> {{ client.password }}</p>
         </router-link>
       </li>

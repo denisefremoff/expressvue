@@ -30,5 +30,22 @@ class ManagerService {
       console.log(e);
     }
   }
+
+  async getClients() {
+    try {
+      const clients = await Client.findAll();
+      return clients;
+    } catch (e) {
+      console.log(e);
+    }
+  }
+  async getClientById(id) {
+    try {
+      const client = await Client.findOne({ where: { id } });
+      return client;
+    } catch (e) {
+      console.log(e);
+    }
+  }
 }
 module.exports = new ManagerService();

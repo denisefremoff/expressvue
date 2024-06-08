@@ -3,7 +3,7 @@ const router = new Router();
 const managerController = require("../controller/managerController.js");
 
 router.post("/client-registration", managerController.registration);
-// app.get("/clients", clientController);
-// app.get("/clients/:id");
+router.get("/clients", managerController.getClients);
+router.get("/clients/:id", managerController.getClientById);
 
 module.exports = router;

@@ -1,22 +1,26 @@
 <script>
-import axios from 'axios';
+import axios from "axios";
 
 export default {
   data() {
     return {
-      client: null,
-      message: ''
+      client: {},
+      message: "",
     };
   },
   async created() {
     const clientId = this.$route.params.id;
     try {
-      const response = await axios.get(`http://localhost:3000/clients/${clientId}`);
+      const response = await axios.get(
+        `http://localhost:3000/api/manager/clients/${clientId}`
+      );
       this.client = response.data;
+      console.log(response);
     } catch (error) {
-      this.message = 'Error: ' + (error.response ? error.response.data : error.message);
+      this.message =
+        "Error: " + (error.response ? error.response.data : error.message);
     }
-  }
+  },
 };
 </script>
 
@@ -25,10 +29,12 @@ export default {
     <h2>Клиент</h2>
     <p v-if="message">{{ message }}</p>
     <div v-else>
-      <p><strong>ФИО:</strong> {{ client.name }}</p>
+      <p><strong>ФИО:</strong> {{ client.fullName }}</p>
       <p><strong>E-mail:</strong> {{ client.email }}</p>
       <p><strong>№ договора:</strong> {{ client.contract_number }}</p>
-      <p><strong>Срок договора в месяцах:</strong> {{ client.contract_term }}</p>
+      <p>
+        <strong>Срок договора в месяцах:</strong> {{ client.contract_term }}
+      </p>
       <p><strong>Пароль:</strong> {{ client.password }}</p>
     </div>
   </div>
