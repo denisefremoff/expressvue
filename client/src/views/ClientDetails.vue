@@ -12,7 +12,7 @@ export default {
     const clientId = this.$route.params.id;
     try {
       const response = await axios.get(
-        `http://localhost:3000/api/manager/clients/${clientId}`
+        `http://localhost:3000/api/manager/client/${clientId}`
       );
       this.client = response.data;
       console.log(response);
@@ -20,6 +20,21 @@ export default {
       this.message =
         "Error: " + (error.response ? error.response.data : error.message);
     }
+  },
+  methods: {
+    async deleteClient() {
+      const clientId = this.$route.params.id;
+      try {
+        await axios.delete(
+          `http://localhost:3000/api/manager/client/${clientId}`
+        );
+        this.message = "Клиент успешно удален";
+        this.$router.push({ name: "ListClients" });
+      } catch (error) {
+        this.message =
+          "Error: " + (error.response ? error.response.data : error.message);
+      }
+    },
   },
 };
 </script>
@@ -36,6 +51,12 @@ export default {
         <strong>Срок договора в месяцах:</strong> {{ client.contract_term }}
       </p>
       <p><strong>Пароль:</strong> {{ client.password }}</p>
+    </div>
+    <div v-if="client" class="tool">
+      <router-link :to="{ name: 'EditingClient', params: { id: client.id } }"
+        >Редактирование клиента</router-link
+      >
+      <button @click="deleteClient">Удалить клиента</button>
     </div>
   </div>
 </template>

@@ -4,6 +4,6 @@ const managerController = require("../controller/managerController.js");
 
 router.post("/client-registration", managerController.registration);
 router.get("/clients", managerController.getClients);
-router.get("/clients/:id", managerController.getClientById);
+router.get("/client/:id", managerController.getClientById);
 
 module.exports = router;
