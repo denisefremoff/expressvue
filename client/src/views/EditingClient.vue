@@ -31,12 +31,12 @@ export default {
     async submitForm() {
       const clientId = this.$route.params.id;
       try {
-        await axios.patch(
+        const response = await axios.patch(
           `http://localhost:3000/api/client/redaction`,
           this.form
         );
-        this.message = "Клиент обновлен успешно";
-        //this.$router.push({ name: "ClientDetails", params: { id: clientId } }); // Перенаправление на страницу клиента
+        this.message = response.data;
+        this.$router.push({ name: "ClientDetails", params: { id: clientId } }); // Перенаправление на страницу клиента
       } catch (error) {
         this.message =
           "Error: " + (error.response ? error.response.data : error.message);
@@ -92,7 +92,7 @@ export default {
       </div>
       <button type="submit">Сохранить изменения</button>
     </form>
-    <p v-if="message">{{ message }}</p>
+    <p v-if="message">{{ message.message }}</p>
   </div>
 </template>
 

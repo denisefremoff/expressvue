@@ -1,12 +1,13 @@
 const clientService = require("../services/client-service.js");
 class ClientController {
-  async redaction(req, res) {
-    const info = req.body;
+  async redaction(req, res, next) {
     try {
+      const info = req.body;
       const client = await clientService.redaction(info);
-      return res.json(client);
+      console.log(client);
+      return res.json({ message: "Информация обновлена" });
     } catch (e) {
-      return res.status(400).json({ message: e.message });
+      next(e);
     }
   }
 }

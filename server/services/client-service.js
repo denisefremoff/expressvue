@@ -2,18 +2,20 @@ const models = require("../models/index.js");
 const Client = models.Client;
 class ClientService {
   async redaction(info) {
-    try {
-      const client = await Client.update(
-        { ...info },
-        {
-          where: { activationLink: info.activationLink },
-        }
-      );
+    const client = await Client.findOne({
+      where: { activationLink: info.activationLink },
+    });
 
-      return client;
-    } catch (e) {
-      console.log(e);
+    if (!client) {
+      throw ApiError.BadRequest("Клиент не найден");
     }
+    const clientUpdate = await Client.update(
+      { ...info },
+      {
+        where: { activationLink: info.activationLink },
+      }
+    );
+    return clientUpdate;
   }
 }
 

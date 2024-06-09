@@ -28,7 +28,7 @@ export default {
         await axios.delete(
           `http://localhost:3000/api/manager/delete-client/${clientId}`
         );
-        this.message = "Клиент успешно удален";
+        this.message = response.data;
         this.$router.push({ name: "ListClients" });
       } catch (error) {
         this.message =
@@ -42,7 +42,7 @@ export default {
 <template>
   <div>
     <h2>Клиент</h2>
-    <p v-if="message">{{ message }}</p>
+    <p v-if="message">{{ message.message }}</p>
     <div v-else>
       <p><strong>ФИО:</strong> {{ client.fullName }}</p>
       <p><strong>E-mail:</strong> {{ client.email }}</p>

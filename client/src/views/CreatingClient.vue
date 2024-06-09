@@ -21,7 +21,7 @@ export default {
           "http://localhost:3000/api/manager/client-registration",
           this.form
         );
-        this.message = "Отправлено";
+        this.message = response.data;
         console.log(response.data);
       } catch (error) {
         this.message = "Error: " + error.response.data;
@@ -77,7 +77,7 @@ export default {
       </div>
       <button type="submit">Отправить</button>
     </form>
-    <p v-if="message">{{ message }}</p>
+    <p v-if="message">{{ message.message }}</p>
   </div>
 </template>
 
