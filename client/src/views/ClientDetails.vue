@@ -26,7 +26,7 @@ export default {
       const clientId = this.$route.params.id;
       try {
         await axios.delete(
-          `http://localhost:3000/api/manager/client/${clientId}`
+          `http://localhost:3000/api/manager/delete-client/${clientId}`
         );
         this.message = "Клиент успешно удален";
         this.$router.push({ name: "ListClients" });

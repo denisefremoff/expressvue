@@ -47,5 +47,14 @@ class ManagerService {
       console.log(e);
     }
   }
+
+  async destroyClient(id) {
+    try {
+      const client = await Client.destroy({ where: { id: id } });
+      return client;
+    } catch (e) {
+      console.log(e);
+    }
+  }
 }
 module.exports = new ManagerService();

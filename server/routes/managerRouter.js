@@ -3,6 +3,7 @@ const router = new Router();
 const managerController = require("../controller/managerController.js");
 
 router.post("/client-registration", managerController.registration);
+router.delete("/delete-client/:id", managerController.delete);
 router.get("/clients", managerController.getClients);
 router.get("/client/:id", managerController.getClientById);
 
