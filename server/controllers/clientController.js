@@ -1,12 +1,13 @@
 const clientModel = require('../models/clientModel');
+const clientView = require('../views/clientView');
 
 const getAllClients = async (req, res) => {
   try {
     const clients = await clientModel.getAllClients();
-    res.json(clients);
+    clientView.sendClientsList(res, clients);
   } catch (err) {
     console.error('Ошибка при выполнении запроса к базе данных:', err);
-    res.status(500).send('Ошибка сервера');
+    clientView.sendError(res, 'Ошибка сервера');
   }
 };
 
@@ -15,23 +16,23 @@ const getClientById = async (req, res) => {
   try {
     const client = await clientModel.getClientById(clientId);
     if (!client) {
-      res.status(404).send('Клиент не найден');
+      clientView.sendNotFound(res, 'Клиент не найден');
     } else {
-      res.json(client);
+      clientView.sendClient(res, client);
     }
   } catch (err) {
     console.error('Ошибка при выполнении запроса к базе данных:', err);
-    res.status(500).send('Ошибка сервера');
+    clientView.sendError(res, 'Ошибка сервера');
   }
 };
 
 const createClient = async (req, res) => {
   try {
     const newClient = await clientModel.createClient(req.body);
-    res.status(201).json(newClient);
+    clientView.sendClient(res.status(201), newClient);
   } catch (err) {
     console.error('Ошибка при выполнении запроса к базе данных:', err);
-    res.status(500).send('Ошибка сервера');
+    clientView.sendError(res, 'Ошибка сервера');
   }
 };
 
@@ -40,13 +41,13 @@ const updateClient = async (req, res) => {
   try {
     const updatedClient = await clientModel.updateClient(clientId, req.body);
     if (!updatedClient) {
-      res.status(404).send('Клиент не найден');
+      clientView.sendNotFound(res, 'Клиент не найден');
     } else {
-      res.json(updatedClient);
+      clientView.sendClient(res, updatedClient);
     }
   } catch (err) {
     console.error('Ошибка при выполнении запроса к базе данных:', err);
-    res.status(500).send('Ошибка сервера');
+    clientView.sendError(res, 'Ошибка сервера');
   }
 };
 
@@ -55,13 +56,13 @@ const deleteClient = async (req, res) => {
   try {
     const deletedClient = await clientModel.deleteClient(clientId);
     if (!deletedClient) {
-      res.status(404).send('Клиент не найден');
+      clientView.sendNotFound(res, 'Клиент не найден');
     } else {
-      res.json(deletedClient);
+      clientView.sendClient(res, deletedClient);
     }
   } catch (err) {
     console.error('Ошибка при выполнении запроса к базе данных:', err);
-    res.status(500).send('Ошибка сервера');
+    clientView.sendError(res, 'Ошибка сервера');
   }
 };
 
