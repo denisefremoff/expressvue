@@ -11,9 +11,7 @@ class ClientService {
     if (!clientUpdate) {
       throw ApiError.BadRequest("Клиент не найден");
     }
-
     return clientUpdate;
   }
 }
-
 module.exports = new ClientService();

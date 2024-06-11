@@ -7,8 +7,9 @@ require("dotenv").config({
 const express = require("express");
 const cors = require("cors");
 const router = require("./routes/index.js");
-const sequelize = require("./db");
 const cookieParser = require("cookie-parser");
+const errorHandler = require("./middleware/errorMiddleware.js");
+const sequelize = require("./db");
 
 const PORT = process.env.PORT;
 const app = express();
@@ -24,6 +25,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(cors(corsOptions));
 app.use("/api", router);
+app.use(errorHandler);
 // Логирование входящих запросов
 app.use((req, res, next) => {
   console.log(`Полученный ${req.method} запрос на ${req.url}`);
