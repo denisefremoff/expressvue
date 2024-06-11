@@ -40,7 +40,7 @@ export default {
           <p><strong>E-mail:</strong> {{ client.email }}</p>
           <p><strong>№ договора:</strong> {{ client.contract_number }}</p>
           <p><strong>Срок договора в месяцах:</strong> {{ client.contract_term }}</p>
-          <p><strong>Пароль:</strong> {{ client.password }}</p>
+          <!-- <p><strong>Пароль:</strong> {{ client.password }}</p> -->
         </router-link>
         <div class="tool">
           <router-link :to="{ name: 'EditingClient', params: { id: client.id } }"

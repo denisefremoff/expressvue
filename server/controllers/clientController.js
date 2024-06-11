@@ -29,7 +29,8 @@ const getClientById = async (req, res) => {
 const createClient = async (req, res) => {
   try {
     const newClient = await clientModel.createClient(req.body);
-    clientView.sendClient(res.status(201), newClient);
+    res.status(201);
+    clientView.sendClient(res, newClient);
   } catch (err) {
     console.error('Ошибка при выполнении запроса к базе данных:', err);
     clientView.sendError(res, 'Ошибка сервера');

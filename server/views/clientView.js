@@ -1,9 +1,9 @@
 const sendClientsList = (res, clients) => {
-  res.json(clients);
+  res.status(200).json(clients);
 };
 
 const sendClient = (res, client) => {
-  res.json(client);
+  res.status(200).json(client);
 };
 
 const sendError = (res, error) => {
