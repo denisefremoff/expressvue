@@ -30,40 +30,6 @@ app.use((req, res, next) => {
   next();
 });
 
-// Маршрут для добавления нового клиента
-// app.post("/clients", async (req, res) => {
-//   const { name, email, contract_number, contract_term, password } = req.body;
-//   try {
-//     const result = await pool.query(
-//       "INSERT INTO clients (name, email, contract_number, contract_term, password) VALUES ($1, $2, $3, $4, $5) RETURNING *",
-//       [name, email, contract_number, contract_term, password]
-//     );
-//     console.log("Новый клиент добавлен:", result.rows[0]);
-//     res.status(201).json(result.rows[0]);
-//   } catch (err) {
-//     console.error("Ошибка при выполнении запроса к базе данных:", err);
-//     res.status(500).send("Ошибка сервера");
-//   }
-// });
-
-// Маршрут для получения данных конкретного клиента
-// app.get("/clients/:id", async (req, res) => {
-//   const clientId = req.params.id;
-//   try {
-//     const { rows } = await pool.query("SELECT * FROM clients WHERE id = $1", [
-//       clientId,
-//     ]);
-//     if (rows.length === 0) {
-//       res.status(404).send("Клиент не найден");
-//     } else {
-//       res.json(rows[0]);
-//     }
-//   } catch (err) {
-//     console.error("Ошибка при выполнении запроса к базе данных:", err);
-//     res.status(500).send("Ошибка сервера");
-//   }
-// });
-
 //запуск сервера
 
 const start = async () => {
