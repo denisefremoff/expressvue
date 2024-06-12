@@ -1,15 +1,15 @@
 const managerService = require("../services/manager-services");
 const ApiError = require("../exceptions/api-error.js");
 class ManagerController {
-  async registration(req, res, next) {
+  async registrationClient(req, res, next) {
     try {
       const { fullName, email, contract_number, contract_term, password } =
         req.body;
       const client = await managerService.registration(
-        fullName,
+        // fullName,
         email,
-        contract_number,
-        contract_term,
+        // contract_number,
+        // contract_term,
         password
       );
       return res.json({ message: "Клиент зарегистрирован" });

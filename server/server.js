@@ -1,7 +1,7 @@
 const path = require("path");
 require("dotenv").config({
   override: true,
-  path: path.resolve(__dirname, ".env"),
+  path: path.resolve(__dirname, ".env.example"),
 });
 
 const express = require("express");

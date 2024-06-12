@@ -5,10 +5,10 @@ const bcrypt = require("bcrypt");
 const ApiError = require("../exceptions/api-error.js");
 class ManagerService {
   async registration(
-    fullName,
+    // fullName,
     email,
-    contract_number,
-    contract_term,
+    // contract_number,
+    // contract_term,
     password
   ) {
     const candidate = await Client.findOne({ where: { email } });
@@ -20,10 +20,10 @@ class ManagerService {
     const hashPassword = await bcrypt.hash(password, 5);
     const activationLink = uuid.v4();
     const client = await Client.create({
-      fullName,
+      // fullName,
       email,
-      contract_number,
-      contract_term,
+      // contract_number,
+      // contract_term,
       password: hashPassword,
       activationLink,
     });

@@ -5,10 +5,10 @@ const validator = require("../validator/validation.js");
 
 router.post(
   "/client-registration",
-  validator.validateRegistration,
-  managerController.registration
+  // validator.validateRegistration,
+  managerController.registrationClient
 );
-router.delete("/delete-client/:id", managerController.delete);
+router.delete("/client-delete/:id", managerController.delete);
 router.get("/clients", managerController.getClients);
 router.get("/client/:id", managerController.getClientById);
 

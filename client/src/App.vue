@@ -3,6 +3,7 @@
     <router-link to="/">Добавить клиента</router-link>
     <router-link to="/editingclient">Редактирование клиента</router-link>
     <router-link to="/listclients">Клиенты</router-link>
+    <router-link to="/managerAdd">Добавить менеджера</router-link>
   </nav>
   <router-view></router-view>
 </template>
