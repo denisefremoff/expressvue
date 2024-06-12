@@ -50,7 +50,6 @@ export default {
       <p>
         <strong>Срок договора в месяцах:</strong> {{ client.contract_term }}
       </p>
-      <p><strong>Пароль:</strong> {{ client.password }}</p>
     </div>
     <div v-if="client" class="tool">
       <router-link :to="{ name: 'EditingClient', params: { id: client.id } }"
