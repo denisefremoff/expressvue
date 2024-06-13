@@ -31,7 +31,7 @@ export default {
 
 <template>
   <div>
-    <h2>Регистрация менеджера</h2>
+    <h2>Вход</h2>
     <form @submit.prevent="submitForm">
       <div>
         <input

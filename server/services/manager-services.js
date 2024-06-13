@@ -1,8 +1,10 @@
 const models = require("../models/index.js");
 const Client = models.Client;
+const Manager = models.Manager;
 const uuid = require("uuid");
 const bcrypt = require("bcrypt");
 const ApiError = require("../exceptions/api-error.js");
+
 class ManagerService {
   async registration(
     // fullName,
@@ -48,6 +50,15 @@ class ManagerService {
       throw ApiError.BadRequest("Клиент не найден");
     }
     return client;
+  }
+
+  async activate(activationLink) {
+    const manager = await Manager.findOne({ where: { activationLink } });
+    if (!manager) {
+      throw ApiError.BadRequest("Некорректная ссылка активации");
+    }
+    manager.isActivated = true;
+    await manager.save();
   }
 }
 module.exports = new ManagerService();

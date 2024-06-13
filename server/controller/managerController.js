@@ -3,6 +3,7 @@ const ApiError = require("../exceptions/api-error.js");
 class ManagerController {
   async registrationClient(req, res, next) {
     try {
+      // const { fullName, email, contract_number, contract_term, password }
       const { fullName, email, contract_number, contract_term, password } =
         req.body;
       const client = await managerService.registration(
@@ -41,6 +42,17 @@ class ManagerController {
       const client = await managerService.destroyClient(id);
 
       return res.json({ message: "Клиент удален" });
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  a; // ------- активация аккаунта---------------
+  async activate(req, res, next) {
+    try {
+      const activationLink = req.params.link;
+      await managerService.activate(activationLink);
+      return res.redirect(process.env.AUTH_URL);
     } catch (e) {
       next(e);
     }

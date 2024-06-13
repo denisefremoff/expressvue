@@ -7,7 +7,10 @@ class AdminController {
         email,
         password
       );
-      return res.json({ message: "Регистрация менеджера прошла успешно" });
+      return res.json({
+        message:
+          "Регистрация менеджера прошла успешно. На вашу почту было отправлено письмо",
+      });
     } catch (e) {
       next(e);
     }

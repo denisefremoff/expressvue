@@ -22,3 +22,5 @@ class AuthService {
     throw ApiError.BadRequest("Пользователь не найден");
   }
 }
+
+module.exports = new AuthService();

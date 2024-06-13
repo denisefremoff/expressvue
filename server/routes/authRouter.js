@@ -1,12 +1,13 @@
 const Router = require("express").Router;
 const router = new Router();
 const validator = require("../validator/validation.js");
-const authController = require("../controller/authController.js");
+const Authtorisation = require("../controller/authController.js");
 
 router.post(
   "/",
-  // validator.validateAuth,
-  authController.login
+  //validator.validateAuth,
+  Authtorisation.login
 );
 
 module.exports = router;
+// return res.redirect(process.env.CLIENT_URL);

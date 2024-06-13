@@ -3,6 +3,7 @@ const Manager = models.Manager;
 const uuid = require("uuid");
 const bcrypt = require("bcrypt");
 const ApiError = require("../exceptions/api-error.js");
+const mailService = require("./mail-service.js");
 class AdminService {
   async registrationManager(email, password) {
     const candidate = await Manager.findOne({ where: { email } });
@@ -19,6 +20,10 @@ class AdminService {
       password: hashPassword,
       activationLink,
     });
+    await mailService.sendActivationMail(
+      email,
+      `${process.env.API_URL}/api/manager/activate/${activationLink}`
+    );
     return { manadger };
   }
 }
