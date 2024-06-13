@@ -38,7 +38,7 @@ const routes = [
     meta: { title: "Добавить менеджера" },
   },
   {
-    path: "/Login",
+    path: "/login",
     name: "Login",
     component: Login,
     meta: { title: "Добавить менеджера" },

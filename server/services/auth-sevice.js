@@ -1,15 +1,17 @@
 const models = require("../models/index.js");
 const Client = models.Client;
 const Manager = models.Manager;
+const bcrypt = require("bcrypt");
+const ApiError = require("../exceptions/api-error.js");
 class AuthService {
   async login(email, password) {
-    const candidate = await Client.findOne({ where: { email } });
-    if (candidate) {
-      const isPassEquals = await bcrypt.compare(password, candidate.password);
+    const client = await Client.findOne({ where: { email } });
+    if (client) {
+      const isPassEquals = await bcrypt.compare(password, client.password);
       if (isPassEquals) {
-        return candidate;
+        return client;
       }
-      throw ApiError.BadRequest("Неверный пароль");
+      throw ApiError.badRequest("Неверный пароль");
     }
     const manager = await Manager.findOne({ where: { email } });
     if (manager) {
@@ -17,9 +19,9 @@ class AuthService {
       if (isPassEquals) {
         return manager;
       }
-      throw ApiError.BadRequest("Неверный пароль");
+      throw ApiError.badRequest("Неверный пароль");
     }
-    throw ApiError.BadRequest("Пользователь не найден");
+    throw ApiError.badRequest("Пользователь не найден");
   }
 }
 

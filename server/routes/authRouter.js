@@ -4,7 +4,7 @@ const validator = require("../validator/validation.js");
 const Authtorisation = require("../controller/authController.js");
 
 router.post(
-  "/",
+  "/login",
   //validator.validateAuth,
   Authtorisation.login
 );
