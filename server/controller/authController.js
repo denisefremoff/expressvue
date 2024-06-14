@@ -3,9 +3,14 @@ class Authorisation {
   async login(req, res, next) {
     try {
       const { email, password } = req.body;
-      const user = await authService.login(email, password);
-      console.log(user);
-      return res.json(user);
+      const candidateData = await authService.login(email, password);
+      res.cookie("refreshToken", candidateData.refreshToken, {
+        domain: process.env.CLIENT_URL,
+        withCredentials: true,
+        maxAge: 30 * 24 * 60 * 60 * 1000,
+        httpOnly: true,
+      });
+      return res.json({ candidateData, message: "вы вошли" });
     } catch (e) {
       next(e);
     }

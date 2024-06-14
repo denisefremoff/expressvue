@@ -9,6 +9,12 @@ import Login from "../views/Login.vue";
 const routes = [
   {
     path: "/",
+    name: "Login",
+    component: Login,
+    meta: { title: "Вход" },
+  },
+  {
+    path: "/createclient",
     name: "CreatingClient",
     component: CreatingClient,
     meta: { title: "Добавить клиента" },
@@ -35,12 +41,6 @@ const routes = [
     path: "/managerAdd",
     name: "CreatingManager",
     component: CreatingManager,
-    meta: { title: "Добавить менеджера" },
-  },
-  {
-    path: "/login",
-    name: "Login",
-    component: Login,
     meta: { title: "Добавить менеджера" },
   },
 ];

@@ -52,7 +52,7 @@ class ManagerController {
     try {
       const activationLink = req.params.link;
       await managerService.activate(activationLink);
-      return res.redirect(process.env.AUTH_URL);
+      return res.redirect(process.env.CLIENT_URL);
     } catch (e) {
       next(e);
     }

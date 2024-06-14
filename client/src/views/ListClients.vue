@@ -27,6 +27,7 @@ export default {
   <div>
     <h2>Список клиентов</h2>
     <ul>
+      <li v-if="clients.length === 0">Список пуст</li>
       <li v-for="client in clients" :key="client.id">
         <router-link :to="{ name: 'ClientDetails', params: { id: client.id } }">
           <p><strong>ФИО:</strong> {{ client.fullName }}</p>
