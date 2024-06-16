@@ -60,5 +60,12 @@ class ManagerService {
     manager.isActivated = true;
     await manager.save();
   }
+  async getManagerById(id) {
+    const manager = await Manager.findOne({ where: { id } });
+    if (!manager) {
+      throw ApiError.BadRequest("Менеджер не найден не найден");
+    }
+    return manager;
+  }
 }
 module.exports = new ManagerService();

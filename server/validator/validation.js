@@ -6,7 +6,7 @@ exports.validateRegistration = [
   check("email").isString().withMessage("Поле должен быть строкой"),
   check("email").isEmail().withMessage("Некорректный email"),
   check("email")
-    .matches(/[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+/)
+    .matches(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(com|ru|su)$/)
     .withMessage(
       "Должен содержать только латинские буквы и цифры. Например: 9XUZMMM@example.com"
     ),
@@ -43,9 +43,9 @@ exports.validateLogin = [
   check("email").isString().withMessage("Поле должен быть строкой"),
   check("email").isEmail().withMessage("Некорректный email"),
   check("email")
-    .matches(/[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+/)
+    .matches(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(com|ru|su)$/)
     .withMessage(
-      "Должен содержать только латинские буквы и цифры. Например: 9XUZMMM@example.com"
+      "Адрес электронной содержать только латинские буквы и цифры. Пример: 9XUZMMM@example.com"
     ),
   check("password")
     .not()
@@ -81,7 +81,7 @@ exports.validateEmail = [
   check("email").isString().withMessage("Поле должен быть строкой"),
   check("email").isEmail().withMessage("Некорректный email"),
   check("email")
-    .matches(/[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+/)
+    .matches(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(com|ru|su)$/)
     .withMessage(
       "Должен содержать только латинские буквы и цифры. Например: 9XUZMMM@example.com"
     ),

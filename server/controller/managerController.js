@@ -57,6 +57,15 @@ class ManagerController {
       next(e);
     }
   }
+  async getManagerById(req, res, next) {
+    try {
+      const { id } = req.params;
+      const manager = await managerService.getManagerById(id);
+      return res.json(manager);
+    } catch (e) {
+      next(e);
+    }
+  }
 }
 
 module.exports = new ManagerController();

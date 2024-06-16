@@ -1,7 +1,7 @@
 const path = require("path");
 require("dotenv").config({
   override: true,
-  path: path.resolve(__dirname, ".env.example"),
+  path: path.resolve(__dirname, ".env_example"),
 });
 
 const express = require("express");
@@ -17,7 +17,7 @@ const app = express();
 const corsOptions = {
   credentials: true,
   origin: process.env.CLIENT_URL,
-  //optionsSuccessStatus: 200,
+  optionsSuccessStatus: 200,
 };
 
 app.use(express.json());

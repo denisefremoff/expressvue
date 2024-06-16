@@ -8,6 +8,4 @@ router.post(
   //validator.validateAuth,
   Authtorisation.login
 );
-
 module.exports = router;
-// return res.redirect(process.env.CLIENT_URL);

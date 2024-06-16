@@ -29,7 +29,7 @@ class AuthService {
         const managerDto = new ManagerDto(manager);
         const tokens = tokenService.generateTokens({ ...managerDto });
         await tokenService.saveToken(managerDto.email, tokens.refreshToken);
-        return { ...tokens, manager: managerDto };
+        return { ...tokens, id: managerDto.id, role: managerDto.role };
       }
       throw ApiError.badRequest("Неверный пароль");
     }

@@ -12,5 +12,6 @@ router.delete("/client-delete/:id", managerController.delete);
 router.get("/clients", managerController.getClients);
 router.get("/client/:id", managerController.getClientById);
 router.get("/activate/:link", managerController.activate);
+router.get("/:id", managerController.getManagerById);
 
 module.exports = router;
