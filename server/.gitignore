@@ -1,11 +1,7 @@
 # Dependencies
 node_modules/
 
-# Database configuration
-db.js
-
 # Miscellaneous
 .DS_Store
 *.log
 .env
-

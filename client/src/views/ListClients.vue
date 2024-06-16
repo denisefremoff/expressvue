@@ -10,7 +10,7 @@ export default {
   },
   async created() {
     try {
-      const response = await axios.get('http://localhost:3000/clients');
+      const response = await axios.get('http://localhost:3000/api/clients');
       this.clients = response.data;
     } catch (error) {
       this.message = 'Error: ' + (error.response ? error.response.data : error.message);
@@ -19,7 +19,7 @@ export default {
   methods: {
     async deleteClient(clientId) {
       try {
-        await axios.delete(`http://localhost:3000/clients/${clientId}`);
+        await axios.delete(`http://localhost:3000/api/clients/${clientId}`);
         this.clients = this.clients.filter(client => client.id !== clientId);
         this.message = 'Клиент успешно удален';
       } catch (error) {
@@ -40,7 +40,8 @@ export default {
           <p><strong>E-mail:</strong> {{ client.email }}</p>
           <p><strong>№ договора:</strong> {{ client.contract_number }}</p>
           <p><strong>Срок договора в месяцах:</strong> {{ client.contract_term }}</p>
-          <!-- <p><strong>Пароль:</strong> {{ client.password }}</p> -->
+          <p><strong>Дата создания:</strong> {{ new Date(client.created_at).toLocaleString() }}</p>
+          <p><strong>Дата последнего обновления:</strong> {{ new Date(client.updated_at).toLocaleString() }}</p>
         </router-link>
         <div class="tool">
           <router-link :to="{ name: 'EditingClient', params: { id: client.id } }"

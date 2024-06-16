@@ -1,3 +1,33 @@
+<template>
+  <div>
+    <h2>Редактировать клиента</h2>
+    <form @submit.prevent="submitForm">
+      <div>
+        <input type="text" placeholder="Фамилия Имя Отчество" v-model="form.name" required>
+        <p v-if="errors.name" class="error">{{ errors.name }}</p>
+      </div>
+      <div>
+        <input type="email" placeholder="E-mail" v-model="form.email" required>
+        <p v-if="errors.email" class="error">{{ errors.email }}</p>
+      </div>
+      <div>
+        <input type="text" placeholder="Номер договора" v-model="form.contract_number" required>
+        <p v-if="errors.contract_number" class="error">{{ errors.contract_number }}</p>
+      </div>
+      <div>
+        <input type="number" placeholder="Срок договора в месяцах" v-model="form.contract_term" required>
+        <p v-if="errors.contract_term" class="error">{{ errors.contract_term }}</p>
+      </div>
+      <div>
+        <input type="password" placeholder="Пароль" v-model="form.password" required>
+        <p v-if="errors.password" class="error">{{ errors.password }}</p>
+      </div>
+      <button type="submit">Сохранить изменения</button>
+    </form>
+    <p v-if="message">{{ message }}</p>
+  </div>
+</template>
+
 <script>
 import axios from 'axios';
 
@@ -11,14 +41,15 @@ export default {
         contract_term: '',
         password: ''
       },
-      message: ''
+      message: '',
+      errors: {}
     };
   },
   async created() {
     const clientId = this.$route.params.id;
     try {
-      const response = await axios.get(`http://localhost:3000/clients/${clientId}`);
-      this.form = response.data; // Заполняем форму данными клиента
+      const response = await axios.get(`http://localhost:3000/api/clients/${clientId}/edit`);
+      this.form = response.data;
     } catch (error) {
       this.message = 'Error: ' + (error.response ? error.response.data : error.message);
     }
@@ -27,41 +58,28 @@ export default {
     async submitForm() {
       const clientId = this.$route.params.id;
       try {
-        await axios.patch(`http://localhost:3000/clients/${clientId}`, this.form);
+        this.errors = {}; // Сброс ошибок перед отправкой
+        await axios.patch(`http://localhost:3000/api/clients/${clientId}`, this.form);
         this.message = 'Клиент обновлен успешно';
-        this.$router.push({ name: 'ClientDetails', params: { id: clientId } }); // Перенаправление на страницу клиента
+        this.$router.push({ name: 'ClientDetails', params: { id: clientId } });
       } catch (error) {
-        this.message = 'Error: ' + (error.response ? error.response.data : error.message);
+        console.error('Ошибка при обновлении клиента:', error);
+        if (error.response && error.response.data.errors) {
+          console.log('Ответ ошибки сервера:', error.response.data.errors);
+          this.processValidationErrors(error.response.data.errors);
+        } else {
+          this.message = 'Error: ' + (error.response ? error.response.data : error.message);
+        }
       }
+    },
+    processValidationErrors(errors) {
+      errors.forEach(error => {
+        this.errors[error.path] = error.msg;
+      });
     }
   }
 };
 </script>
-
-<template>
-  <div>
-    <h2>Редактировать клиента</h2>
-    <form @submit.prevent="submitForm">
-      <div>
-        <input type="text" placeholder="Фамилия Имя Отчество" v-model="form.name" required>
-      </div>
-      <div>
-        <input type="email" placeholder="E-mail" v-model="form.email" required>
-      </div>
-      <div>
-        <input type="text" placeholder="Номер договора" v-model="form.contract_number" required>
-      </div>
-      <div>
-        <input type="number" placeholder="Срок договора в месяцах" v-model="form.contract_term" required>
-      </div>
-      <div>
-        <input type="password" placeholder="Пароль" v-model="form.password" required>
-      </div>
-      <button type="submit">Сохранить изменения</button>
-    </form>
-    <p v-if="message">{{ message }}</p>
-  </div>
-</template>
 
 <style scoped>
 form {
@@ -92,6 +110,12 @@ button {
 
 button:hover {
   background-color: #35916b;
+}
+
+p.error {
+  color: red;
+  font-size: 14px;
+  margin: 5px 0 0 0;
 }
 
 p {

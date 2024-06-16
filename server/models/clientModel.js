@@ -1,80 +1,73 @@
-const pool = require('../db');
+const knex = require('knex')(require('../config/knexfile').development);
 const { hashPassword } = require('../utils/passwordUtils');
 
-const getAllClients = async () => {
-  // const { rows } = await pool.query('SELECT * FROM clients ORDER BY id ASC');
-  const { rows } = await pool.query('SELECT id, name, email, contract_number, contract_term FROM clients ORDER BY id ASC');
-  return rows;
-};
-
-const getClientById = async (id) => {
-  const { rows } = await pool.query('SELECT * FROM clients WHERE id = $1', [id]);
-  if (rows.length === 0) {
-    return null;
+// Удаляет поле password из объекта клиента
+const removePasswordField = (client) => {
+  if (client && client.password) {
+    delete client.password;
   }
-  return rows[0];
+  return client;
 };
 
+// Получает всех клиентов
+const getAllClients = async () => {
+  const clients = await knex('clients')
+    .select('id', 'name', 'email', 'contract_number', 'contract_term', 'created_at', 'updated_at')
+    .orderBy('created_at', 'asc');
+  return clients.map(removePasswordField);
+};
+
+// Получает клиента по ID
+const getClientById = async (id) => {
+  const client = await knex('clients').where({ id }).first();
+  return removePasswordField(client);
+};
+
+// Получает клиента для редактирования по ID
+const getClientForEdit = async (id) => {
+  const client = await knex('clients')
+    .select('id', 'name', 'email', 'contract_number', 'contract_term', 'password', 'created_at', 'updated_at')
+    .where({ id })
+    .first();
+  return client;
+};
+
+// Создает нового клиента
 const createClient = async (clientData) => {
   const { name, email, contract_number, contract_term, password } = clientData;
-
-  // Хеширование пароля перед сохранением
   const hashedPassword = await hashPassword(password);
-
-  const result = await pool.query(
-    'INSERT INTO clients (name, email, contract_number, contract_term, password) VALUES ($1, $2, $3, $4, $5) RETURNING *',
-    [name, email, contract_number, contract_term, hashedPassword]
-  );
-  return result.rows[0];
+  const [newClient] = await knex('clients')
+    .insert({ name, email, contract_number, contract_term, password: hashedPassword })
+    .returning('*');
+  return removePasswordField(newClient);
 };
 
+// Обновляет клиента по ID
 const updateClient = async (id, clientData) => {
-  const fields = ['name', 'email', 'contract_number', 'contract_term', 'password'];
-  const updates = [];
-  const values = [];
-  let index = 1;
-
-  // Хеширование пароля, если он есть в обновлениях
   if (clientData.password) {
     clientData.password = await hashPassword(clientData.password);
   }
-
-  fields.forEach(field => {
-    if (clientData[field]) {
-      updates.push(`${field} = $${index}`);
-      values.push(clientData[field]);
-      index++;
-    }
-  });
-
-  if (updates.length === 0) {
-    throw new Error('Нет данных для обновления');
-  }
-
-  const updateQuery = `UPDATE clients SET ${updates.join(', ')} WHERE id = $${index} RETURNING *`;
-  values.push(id);
-  const result = await pool.query(updateQuery, values);
-
-  if (result.rows.length === 0) {
-    return null;
-  }
-
-  return result.rows[0];
+  clientData.updated_at = new Date().toISOString();
+  const [updatedClient] = await knex('clients')
+    .where({ id })
+    .update(clientData)
+    .returning('*');
+  return removePasswordField(updatedClient);
 };
 
+// Удаляет клиента по ID
 const deleteClient = async (id) => {
-  const result = await pool.query('DELETE FROM clients WHERE id = $1 RETURNING *', [id]);
-
-  if (result.rows.length === 0) {
-    return null;
-  }
-
-  return result.rows[0];
+  const [deletedClient] = await knex('clients')
+    .where({ id })
+    .del()
+    .returning('*');
+  return removePasswordField(deletedClient);
 };
 
 module.exports = {
   getAllClients,
   getClientById,
+  getClientForEdit,
   createClient,
   updateClient,
   deleteClient,

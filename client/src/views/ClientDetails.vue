@@ -11,7 +11,7 @@ export default {
   async created() {
     const clientId = this.$route.params.id;
     try {
-      const response = await axios.get(`http://localhost:3000/clients/${clientId}`);
+      const response = await axios.get(`http://localhost:3000/api/clients/${clientId}`);
       this.client = response.data;
     } catch (error) {
       this.message = 'Error: ' + (error.response ? error.response.data : error.message);
@@ -22,7 +22,7 @@ export default {
       const clientId = this.$route.params.id;
       try {
         console.log(`Отправка запроса на удаление клиента с ID: ${clientId}`);
-        const response = await axios.delete(`http://localhost:3000/clients/${clientId}`);
+        const response = await axios.delete(`http://localhost:3000/api/clients/${clientId}`);
         console.log('Ответ сервера на удаление:', response.data);
         this.message = 'Клиент успешно удален';
         this.$router.push({ name: 'ListClients' }); // Перенаправление на страницу списка клиентов
@@ -44,7 +44,9 @@ export default {
       <p><strong>E-mail:</strong> {{ client.email }}</p>
       <p><strong>№ договора:</strong> {{ client.contract_number }}</p>
       <p><strong>Срок договора в месяцах:</strong> {{ client.contract_term }}</p>
-      <p><strong>Пароль:</strong> {{ client.password }}</p>
+      <!-- <p><strong>Пароль:</strong> {{ client.password }}</p> -->
+      <p><strong>Дата создания:</strong> {{ new Date(client.created_at).toLocaleString() }}</p>
+      <p><strong>Дата последнего обновления:</strong> {{ new Date(client.updated_at).toLocaleString() }}</p>
     </div>
     <div v-if="client" class="tool">
       <router-link :to="{ name: 'EditingClient', params: { id: client.id } }">Редактирование клиента</router-link>

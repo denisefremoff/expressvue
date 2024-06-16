@@ -1,75 +1,87 @@
 const clientModel = require('../models/clientModel');
 const clientView = require('../views/clientView');
 
-const getAllClients = async (req, res) => {
+// get-запрос для страницы список всех клиентов
+const getAllClients = async (req, res, next) => {
   try {
     const clients = await clientModel.getAllClients();
     clientView.sendClientsList(res, clients);
   } catch (err) {
-    console.error('Ошибка при выполнении запроса к базе данных:', err);
-    clientView.sendError(res, 'Ошибка сервера');
+    next(err);
   }
 };
 
-const getClientById = async (req, res) => {
-  const clientId = req.params.id;
+// get-запрос для страницы одного клиента
+const getClientById = async (req, res, next) => {
   try {
-    const client = await clientModel.getClientById(clientId);
+    const client = await clientModel.getClientById(req.params.id);
     if (!client) {
-      clientView.sendNotFound(res, 'Клиент не найден');
-    } else {
-      clientView.sendClient(res, client);
+      return clientView.sendNotFoundError(res);
     }
+    clientView.sendClient(res, client);
   } catch (err) {
-    console.error('Ошибка при выполнении запроса к базе данных:', err);
-    clientView.sendError(res, 'Ошибка сервера');
+    next(err);
   }
 };
 
-const createClient = async (req, res) => {
+// get-запрос для заполнения формы на странице редактирования клиента
+const getClientForEdit = async (req, res, next) => {
   try {
+    const client = await clientModel.getClientForEdit(req.params.id); // Здесь вызывается метод getClientForEdit
+    if (!client) {
+      return clientView.sendNotFoundError(res);
+    }
+    clientView.sendClient(res, client);
+  } catch (err) {
+    next(err);
+  }
+};
+
+// post-запрос для страницы создания клиента
+const createClient = async (req, res, next) => {
+  try {
+    console.log('Создание клиента с данными: ', req.body);
     const newClient = await clientModel.createClient(req.body);
-    res.status(201);
+    console.log('Создан новый клиент:', newClient);
     clientView.sendClient(res, newClient);
   } catch (err) {
-    console.error('Ошибка при выполнении запроса к базе данных:', err);
-    clientView.sendError(res, 'Ошибка сервера');
+    console.error('Ошибка при создании клиента:', err);
+    next(err);
   }
 };
 
-const updateClient = async (req, res) => {
-  const clientId = req.params.id;
+// patch-запрос для редактирования клиента
+const updateClient = async (req, res, next) => {
   try {
-    const updatedClient = await clientModel.updateClient(clientId, req.body);
+    console.log('Updating client with ID:', req.params.id, 'with data: ', req.body);
+    const updatedClient = await clientModel.updateClient(req.params.id, req.body);
     if (!updatedClient) {
-      clientView.sendNotFound(res, 'Клиент не найден');
-    } else {
-      clientView.sendClient(res, updatedClient);
+      return clientView.sendNotFoundError(res);
     }
+    clientView.sendClient(res, updatedClient);
   } catch (err) {
-    console.error('Ошибка при выполнении запроса к базе данных:', err);
-    clientView.sendError(res, 'Ошибка сервера');
+    next(err);
   }
 };
 
-const deleteClient = async (req, res) => {
-  const clientId = req.params.id;
+// delete-запрос для удаления клиента
+const deleteClient = async (req, res, next) => {
   try {
-    const deletedClient = await clientModel.deleteClient(clientId);
+    console.log('Deleting client with ID:', req.params.id);
+    const deletedClient = await clientModel.deleteClient(req.params.id);
     if (!deletedClient) {
-      clientView.sendNotFound(res, 'Клиент не найден');
-    } else {
-      clientView.sendClient(res, deletedClient);
+      return clientView.sendNotFoundError(res);
     }
+    clientView.sendSuccess(res);
   } catch (err) {
-    console.error('Ошибка при выполнении запроса к базе данных:', err);
-    clientView.sendError(res, 'Ошибка сервера');
+    next(err);
   }
 };
 
 module.exports = {
   getAllClients,
   getClientById,
+  getClientForEdit, // Экспортируем новый метод
   createClient,
   updateClient,
   deleteClient,
