@@ -4,13 +4,23 @@ class Authorisation {
     try {
       const { email, password } = req.body;
       const candidateData = await authService.login(email, password);
-      res.cookie("refreshToken", candidateData.refreshToken, {
-        domain: process.env.CLIENT_URL,
-        withCredentials: true,
-        maxAge: 30 * 24 * 60 * 60 * 1000,
-        httpOnly: true,
-      });
-      return res.json({ candidateData, message: "вы вошли" });
+      console.log(candidateData);
+      // res.cookie("refreshToken", candidateData.refreshToken, {
+      //   path: "/",
+      //   // secure: false, только для https
+      //   maxAge: 30 * 24 * 60 * 60 * 1000,
+      //   httpOnly: true,
+      //   //sameSite: "lax",
+      //});
+      // res.setHeader("Set-Cookie", [
+      //   `accessToken=${accessToken}; HttpOnly; Path=/; Max-Age=${
+      //     60 * 60
+      //   }; Secure=false;`,
+      //   `refreshToken=${refreshToken}; HttpOnly; Path=/; Max-Age=${
+      //     60 * 60 * 24 * 7 * 2
+      //   }; Secure=false;`,
+      // ]);
+      //return res.json({ candidateData, message: "вы вошли" });
     } catch (e) {
       next(e);
     }

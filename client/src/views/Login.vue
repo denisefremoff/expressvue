@@ -21,8 +21,12 @@ export default {
           this.form
         );
         this.message = response.data;
+        document.cookie =
+          "accessToken=" + response.data.candidateData.accessToken;
+        // this.$router.push({ name: "ListClients" });
       } catch (error) {
         this.message = error.response.data;
+        console.log(error);
       }
     },
   },
