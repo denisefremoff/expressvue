@@ -1,5 +1,5 @@
 <script>
-import axios from 'axios';
+import axios from '../axiosConfig';
 
 export default {
   data() {
@@ -10,20 +10,20 @@ export default {
   },
   async created() {
     try {
-      const response = await axios.get('http://localhost:3000/api/clients');
+      const response = await axios.get('/api/clients');
       this.clients = response.data;
     } catch (error) {
-      this.message = 'Error: ' + (error.response ? error.response.data : error.message);
+      this.message = 'Ошибка: ' + (error.response ? error.response.data : error.message);
     }
   },
   methods: {
     async deleteClient(clientId) {
       try {
-        await axios.delete(`http://localhost:3000/api/clients/${clientId}`);
+        await axios.delete(`/api/clients/${clientId}`);
         this.clients = this.clients.filter(client => client.id !== clientId);
         this.message = 'Клиент успешно удален';
       } catch (error) {
-        this.message = 'Error: ' + (error.response ? error.response.data : error.message);
+        this.message = 'Ошибка: ' + (error.response ? error.response.data : error.message);
       }
     }
   }
@@ -63,6 +63,9 @@ ul {
 li {
   padding: 10px;
   border-bottom: 1px solid #ddd;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 li:first-child {
@@ -88,6 +91,8 @@ p:last-child {
 
 a {
   color: #213547;
+  text-align: start;
+  width: 400px;
 }
 
 a:hover {
@@ -105,6 +110,7 @@ a:hover {
   cursor: pointer;
   border-radius: 10px;
   margin-right: 10px;
+  text-align: center;
 }
 
 .tool {

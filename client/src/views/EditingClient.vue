@@ -1,3 +1,56 @@
+<script>
+import axios from '../axiosConfig';
+
+export default {
+  data() {
+    return {
+      form: {
+        name: '',
+        email: '',
+        contract_number: '',
+        contract_term: '',
+        password: ''
+      },
+      message: '',
+      errors: {}
+    };
+  },
+  async created() {
+    const clientId = this.$route.params.id;
+    try {
+      const response = await axios.get(`/api/clients/${clientId}/edit`);
+      this.form = response.data;
+    } catch (error) {
+      this.message = 'Ошибка: ' + (error.response ? error.response.data : error.message);
+    }
+  },
+  methods: {
+    async submitForm() {
+      const clientId = this.$route.params.id;
+      try {
+        this.errors = {};
+        await axios.patch(`/api/clients/${clientId}`, this.form);
+        this.message = 'Клиент обновлен успешно';
+        this.$router.push({ name: 'ClientDetails', params: { id: clientId } });
+      } catch (error) {
+        console.error('Ошибка при обновлении клиента:', error);
+        if (error.response && error.response.data.errors) {
+          console.log('Ответ ошибки сервера:', error.response.data.errors);
+          this.processValidationErrors(error.response.data.errors);
+        } else {
+          this.message = 'Ошибка: ' + (error.response ? error.response.data : error.message);
+        }
+      }
+    },
+    processValidationErrors(errors) {
+      errors.forEach(error => {
+        this.errors[error.path] = error.msg;
+      });
+    }
+  }
+};
+</script>
+
 <template>
   <div>
     <h2>Редактировать клиента</h2>
@@ -27,59 +80,6 @@
     <p v-if="message">{{ message }}</p>
   </div>
 </template>
-
-<script>
-import axios from 'axios';
-
-export default {
-  data() {
-    return {
-      form: {
-        name: '',
-        email: '',
-        contract_number: '',
-        contract_term: '',
-        password: ''
-      },
-      message: '',
-      errors: {}
-    };
-  },
-  async created() {
-    const clientId = this.$route.params.id;
-    try {
-      const response = await axios.get(`http://localhost:3000/api/clients/${clientId}/edit`);
-      this.form = response.data;
-    } catch (error) {
-      this.message = 'Error: ' + (error.response ? error.response.data : error.message);
-    }
-  },
-  methods: {
-    async submitForm() {
-      const clientId = this.$route.params.id;
-      try {
-        this.errors = {}; // Сброс ошибок перед отправкой
-        await axios.patch(`http://localhost:3000/api/clients/${clientId}`, this.form);
-        this.message = 'Клиент обновлен успешно';
-        this.$router.push({ name: 'ClientDetails', params: { id: clientId } });
-      } catch (error) {
-        console.error('Ошибка при обновлении клиента:', error);
-        if (error.response && error.response.data.errors) {
-          console.log('Ответ ошибки сервера:', error.response.data.errors);
-          this.processValidationErrors(error.response.data.errors);
-        } else {
-          this.message = 'Error: ' + (error.response ? error.response.data : error.message);
-        }
-      }
-    },
-    processValidationErrors(errors) {
-      errors.forEach(error => {
-        this.errors[error.path] = error.msg;
-      });
-    }
-  }
-};
-</script>
 
 <style scoped>
 form {

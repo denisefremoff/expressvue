@@ -1,5 +1,5 @@
 <script>
-import axios from 'axios';
+import axios from '../axiosConfig';
 
 export default {
   data() {
@@ -11,10 +11,10 @@ export default {
   async created() {
     const clientId = this.$route.params.id;
     try {
-      const response = await axios.get(`http://localhost:3000/api/clients/${clientId}`);
+      const response = await axios.get(`/api/clients/${clientId}`);
       this.client = response.data;
     } catch (error) {
-      this.message = 'Error: ' + (error.response ? error.response.data : error.message);
+      this.message = 'Ошибка: ' + (error.response ? error.response.data : error.message);
     }
   },
   methods: {
@@ -22,29 +22,29 @@ export default {
       const clientId = this.$route.params.id;
       try {
         console.log(`Отправка запроса на удаление клиента с ID: ${clientId}`);
-        const response = await axios.delete(`http://localhost:3000/api/clients/${clientId}`);
+        const response = await axios.delete(`/api/clients/${clientId}`);
         console.log('Ответ сервера на удаление:', response.data);
         this.message = 'Клиент успешно удален';
-        this.$router.push({ name: 'ListClients' }); // Перенаправление на страницу списка клиентов
+        this.$router.push({ name: 'ListClients' });
       } catch (error) {
         console.error('Ошибка при удалении клиента:', error);
-        this.message = 'Error: ' + (error.response ? error.response.data : error.message);
+        this.message = 'Ошибка: ' + (error.response ? error.response.data : error.message);
       }
     }
   }
 };
 </script>
 
+
 <template>
-  <div>
+  <div class="flex">
     <h2>Клиент</h2>
     <p v-if="message">{{ message }}</p>
-    <div v-else-if="client">
+    <div v-else-if="client" class="content">
       <p><strong>ФИО:</strong> {{ client.name }}</p>
       <p><strong>E-mail:</strong> {{ client.email }}</p>
       <p><strong>№ договора:</strong> {{ client.contract_number }}</p>
       <p><strong>Срок договора в месяцах:</strong> {{ client.contract_term }}</p>
-      <!-- <p><strong>Пароль:</strong> {{ client.password }}</p> -->
       <p><strong>Дата создания:</strong> {{ new Date(client.created_at).toLocaleString() }}</p>
       <p><strong>Дата последнего обновления:</strong> {{ new Date(client.updated_at).toLocaleString() }}</p>
     </div>
@@ -110,5 +110,16 @@ button {
 
 button:hover {
   background-color: #c0392b;
+}
+
+.flex {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.content {
+  width: 400px;
+  text-align: start;
 }
 </style>

@@ -1,3 +1,48 @@
+<script>
+import axios from '../axiosConfig';
+
+export default {
+  data() {
+    return {
+      form: {
+        name: '',
+        email: '',
+        contract_number: '',
+        contract_term: '',
+        password: ''
+      },
+      message: '',
+      errors: {}
+    };
+  },
+  methods: {
+    async submitForm() {
+      try {
+        this.errors = {}; // Сброс ошибок перед отправкой
+        console.log('Отправка данных:', this.form);
+        const response = await axios.post('/api/clients', this.form);
+        console.log('Ответ сервера:', response.data);
+        const newClientId = response.data.id; // Получаем ID нового клиента
+        this.$router.push({ name: 'ClientDetails', params: { id: newClientId } }); // Перенаправление на страницу клиента
+      } catch (error) {
+        console.error('Ошибка при создании клиента:', error);
+        if (error.response && error.response.data.errors) {
+          console.log('Ответ ошибки сервера:', error.response.data.errors);
+          this.processValidationErrors(error.response.data.errors);
+        } else {
+          this.message = `Ошибка: ${error.message}`;
+        }
+      }
+    },
+    processValidationErrors(errors) {
+      errors.forEach(error => {
+        this.errors[error.path] = error.msg;
+      });
+    }
+  }
+};
+</script>
+
 <template>
   <div>
     <h2>Создать нового клиента</h2>
@@ -27,51 +72,6 @@
     <p v-if="message">{{ message }}</p>
   </div>
 </template>
-
-<script>
-import axios from 'axios';
-
-export default {
-  data() {
-    return {
-      form: {
-        name: '',
-        email: '',
-        contract_number: '',
-        contract_term: '',
-        password: ''
-      },
-      message: '',
-      errors: {}
-    };
-  },
-  methods: {
-    async submitForm() {
-      try {
-        this.errors = {}; // Сброс ошибок перед отправкой
-        console.log('Отправка данных:', this.form);
-        const response = await axios.post('http://localhost:3000/api/clients', this.form);
-        console.log('Ответ сервера:', response.data);
-        const newClientId = response.data.id; // Получаем ID нового клиента
-        this.$router.push({ name: 'ClientDetails', params: { id: newClientId } }); // Перенаправление на страницу клиента
-      } catch (error) {
-        console.error('Ошибка при создании клиента:', error);
-        if (error.response && error.response.data.errors) {
-          console.log('Ответ ошибки сервера:', error.response.data.errors);
-          this.processValidationErrors(error.response.data.errors);
-        } else {
-          this.message = `Error: ${error.message}`;
-        }
-      }
-    },
-    processValidationErrors(errors) {
-      errors.forEach(error => {
-        this.errors[error.path] = error.msg;
-      });
-    }
-  }
-};
-</script>
 
 <style scoped>
 form {
