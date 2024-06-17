@@ -5,7 +5,7 @@ const nameValidator = (value) => {
   if (words.length !== 3) {
     throw new Error('ФИО должно состоять ровно из трех слов');
   }
-  const regex = /^[А-Я][а-я]{1,14}$/;
+  const regex = /^[А-ЯЁ][а-яё]{1,14}$/u;
   words.forEach(word => {
     if (!regex.test(word)) {
       throw new Error('Каждое слово должно быть длиной от 2 до 15 символов, содержать только кириллические символы и начинаться с заглавной буквы');

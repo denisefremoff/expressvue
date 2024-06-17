@@ -9,6 +9,11 @@ const removePasswordField = (client) => {
   return client;
 };
 
+// Проверяет, является ли значение целым числом
+const isValidId = (id) => {
+  return Number.isInteger(parseInt(id, 10));
+};
+
 // Получает всех клиентов
 const getAllClients = async () => {
   const clients = await knex('clients')
@@ -19,12 +24,18 @@ const getAllClients = async () => {
 
 // Получает клиента по ID
 const getClientById = async (id) => {
+  if (!isValidId(id)) {
+    throw new Error('Invalid ID');
+  }
   const client = await knex('clients').where({ id }).first();
   return removePasswordField(client);
 };
 
 // Получает клиента для редактирования по ID
 const getClientForEdit = async (id) => {
+  if (!isValidId(id)) {
+    throw new Error('Invalid ID');
+  }
   const client = await knex('clients')
     .select('id', 'name', 'email', 'contract_number', 'contract_term', 'password', 'created_at', 'updated_at')
     .where({ id })
@@ -35,6 +46,9 @@ const getClientForEdit = async (id) => {
 // Создает нового клиента
 const createClient = async (clientData) => {
   const { name, email, contract_number, contract_term, password } = clientData;
+  if (!name || !email || !contract_number || !contract_term || !password) {
+    throw new Error('Missing required fields');
+  }
   const hashedPassword = await hashPassword(password);
   const [newClient] = await knex('clients')
     .insert({ name, email, contract_number, contract_term, password: hashedPassword })
@@ -44,6 +58,9 @@ const createClient = async (clientData) => {
 
 // Обновляет клиента по ID
 const updateClient = async (id, clientData) => {
+  if (!isValidId(id)) {
+    throw new Error('Invalid ID');
+  }
   if (clientData.password) {
     clientData.password = await hashPassword(clientData.password);
   }
@@ -57,6 +74,9 @@ const updateClient = async (id, clientData) => {
 
 // Удаляет клиента по ID
 const deleteClient = async (id) => {
+  if (!isValidId(id)) {
+    throw new Error('Invalid ID');
+  }
   const [deletedClient] = await knex('clients')
     .where({ id })
     .del()

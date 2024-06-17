@@ -1,88 +1,89 @@
 const clientModel = require('../models/clientModel');
+const asyncHandler = require('../utils/asyncHandler');
+const { validationResult } = require('express-validator');
+const AppError = require('../utils/customErrors');
 const clientView = require('../views/clientView');
 
-// get-запрос для страницы список всех клиентов
-const getAllClients = async (req, res, next) => {
+const getAllClients = asyncHandler(async (req, res, next) => {
   try {
     const clients = await clientModel.getAllClients();
     clientView.sendClientsList(res, clients);
   } catch (err) {
-    next(err);
+    next(new AppError('Не удалось восстановить клиентов', 500));
   }
-};
+});
 
-// get-запрос для страницы одного клиента
-const getClientById = async (req, res, next) => {
+const getClientById = asyncHandler(async (req, res, next) => {
   try {
     const client = await clientModel.getClientById(req.params.id);
     if (!client) {
-      return clientView.sendNotFoundError(res);
+      return next(new AppError('Клиент не найден', 404));
     }
     clientView.sendClient(res, client);
   } catch (err) {
-    next(err);
+    next(new AppError('Не удалось получить доступ к клиенту', 500));
   }
-};
+});
 
-// get-запрос для заполнения формы на странице редактирования клиента
-const getClientForEdit = async (req, res, next) => {
+const getClientForEdit = asyncHandler(async (req, res, next) => {
   try {
-    const client = await clientModel.getClientForEdit(req.params.id); // Здесь вызывается метод getClientForEdit
+    const client = await clientModel.getClientForEdit(req.params.id);
     if (!client) {
-      return clientView.sendNotFoundError(res);
+      return next(new AppError('Клиент не найден', 404));
     }
     clientView.sendClient(res, client);
   } catch (err) {
-    next(err);
+    next(new AppError('Не удалось получить клиент для редактирования', 500));
   }
-};
+});
 
-// post-запрос для страницы создания клиента
-const createClient = async (req, res, next) => {
+const createClient = asyncHandler(async (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
   try {
-    console.log('Создание клиента с данными: ', req.body);
-    const newClient = await clientModel.createClient(req.body);
-    console.log('Создан новый клиент:', newClient);
-    clientView.sendClient(res, newClient);
+    const client = await clientModel.createClient(req.body);
+    clientView.sendClient(res, client);
   } catch (err) {
-    console.error('Ошибка при создании клиента:', err);
-    next(err);
+    next(new AppError('Не удалось создать клиента', 500));
   }
-};
+});
 
-// patch-запрос для редактирования клиента
-const updateClient = async (req, res, next) => {
+const updateClient = asyncHandler(async (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
   try {
-    console.log('Updating client with ID:', req.params.id, 'with data: ', req.body);
-    const updatedClient = await clientModel.updateClient(req.params.id, req.body);
-    if (!updatedClient) {
-      return clientView.sendNotFoundError(res);
+    const client = await clientModel.updateClient(req.params.id, req.body);
+    if (!client) {
+      return next(new AppError('Клиент не найден', 404));
     }
-    clientView.sendClient(res, updatedClient);
+    clientView.sendClient(res, client);
   } catch (err) {
-    next(err);
+    next(new AppError('Не удалось обновить клиента', 500));
   }
-};
+});
 
-// delete-запрос для удаления клиента
-const deleteClient = async (req, res, next) => {
+const deleteClient = asyncHandler(async (req, res, next) => {
   try {
-    console.log('Deleting client with ID:', req.params.id);
-    const deletedClient = await clientModel.deleteClient(req.params.id);
-    if (!deletedClient) {
-      return clientView.sendNotFoundError(res);
+    const client = await clientModel.deleteClient(req.params.id);
+    if (!client) {
+      return next(new AppError('Клиент не найден', 404));
     }
     clientView.sendSuccess(res);
   } catch (err) {
-    next(err);
+    next(new AppError('Не удалось удалить клиента', 500));
   }
-};
+});
 
 module.exports = {
   getAllClients,
   getClientById,
-  getClientForEdit, // Экспортируем новый метод
+  getClientForEdit,
   createClient,
   updateClient,
   deleteClient,
 };
+

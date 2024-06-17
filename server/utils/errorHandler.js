@@ -1,6 +1,16 @@
+const AppError = require('./customErrors');
+
 const errorHandler = (err, req, res, next) => {
-  console.error('Error: ', err);
-  res.status(err.status || 500).json({ error: err.message || 'Внутренняя ошибка сервера' });
+  console.error('ERROR 💥', err);
+
+  const statusCode = err.statusCode || 500;
+  const status = err.status || 'error';
+  const message = err.isOperational ? err.message : 'Что-то пошло не так';
+
+  res.status(statusCode).json({
+    status: status,
+    message: message,
+  });
 };
 
 module.exports = errorHandler;
